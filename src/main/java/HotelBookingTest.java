@@ -8,46 +8,20 @@ import org.testng.annotations.Test;
 
 public class HotelBookingTest {
 
-    WebDriver driver = new ChromeDriver();
-
-    @FindBy(linkText = "Hotels")
-    private WebElement hotelLink;
-
-    @FindBy(id = "Tags")
-    private WebElement localityTextBox;
-
-    @FindBy(id = "SearchHotelsButton")
-    private WebElement searchButton;
-
-    @FindBy(id = "travellersOnhome")
-    private WebElement travellerSelection;
+    WebDriver driver = new ChromeDriver();	
 
     @Test
-    public void shouldBeAbleToSearchForHotels() {
-        setDriverPath();
+    public void ShouldBeAbleToSearchForHotels() {
+        Utility.SetDriverPath();
 
-        driver.get("https://www.cleartrip.com/");
-        hotelLink.click();
-
-        localityTextBox.sendKeys("Indiranagar, Bangalore");
-
-        new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
-        searchButton.click();
-
+		Utility.WebNavigateTo("https://www.cleartrip.com/");
+		
+		Utility.SearchHotel("Indiranagar, Bangalore","Tue, 15 Oct, 2019","Fri, 18 Oct, 2019", "1 room, 2 adults");
+		
+		String searchResult = Utility.GetElementTest("//*[@id="area"]/section/div/div[2]/div[5]/section/div[1]/div/div[1]/span","Xpath");
+        Assert.assertTrue(searchResult.contains("Showing properties by distance from"));
+		
         driver.quit();
-
-    }
-
-    private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
-        if (PlatformUtil.isWindows()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        }
-        if (PlatformUtil.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-        }
     }
 
 }
