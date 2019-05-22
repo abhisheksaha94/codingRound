@@ -14,7 +14,7 @@ public class SignInTest {
 
         Utility.SetDriverPath();
 
-        driver.get("https://www.cleartrip.com/");
+        Utility.WebNavigateTo("https://www.cleartrip.com/");
         Utility.WaitFor(2000);
 
         driver.findElement(By.linkText("Your trips")).click();
