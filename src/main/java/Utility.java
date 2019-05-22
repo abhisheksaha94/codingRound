@@ -8,12 +8,31 @@ import org.testng.annotations.Test;
 public static class Utility {
 
     WebDriver driver = new ChromeDriver();
+	
+	@FindBy(linkText = "Hotels")
+    private WebElement hotelLink;
 
-    public static void WebNavigateTo(string webAddress)
+    @FindBy(id = "Tags")
+    private WebElement localityTextBox;
+
+    @FindBy(id = "SearchHotelsButton")
+    private WebElement searchButton;
+
+    @FindBy(id = "travellersOnhome")
+    private WebElement travellerSelection;
+	
+	@FindBy(id = "CheckInDate")
+	private WebElement checkInDate;
+	
+	@FindBy(id = "CheckOutDate")
+	private WebElement checkOutDate;
+	
+
+    public static void WebNavigateTo(string _webAddress)
 	{
 		try
 		{
-			driver.get(webAddress);
+			driver.get(_webAddress);
 		}
 		catch (Exception e)
 		{
@@ -21,30 +40,78 @@ public static class Utility {
 		} 
 	}
 	
-	public static void WaitFor(int durationInMilliSeconds) {
+	public static void WaitFor(int _durationInMilliSeconds) {
         try {
-            Thread.sleep(durationInMilliSeconds);
+            Thread.sleep(_durationInMilliSeconds);
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 	
 	//Only for elements with search type as id or xpath
-	public static string GetElementTest(string idOrXpath, string idOrXpathType)
+	public static string GetElementTest(string _idOrXpath, string _idOrXpathType)
 	{
-		if( idType.toLowerCase() == id)
+		if( _idOrXpathType.toLowerCase() == id)
 		{
-			return driver.findElement(By.id(idOrXpath)).getText();
+			return driver.findElement(By.id(_idOrXpath)).getText();
 		}
-		else if (idType.toLowerCase() == xpath)
+		else if (_idOrXpathType.toLowerCase() == xpath)
 		{
-			return driver.findElement(By.xpath(idOrXpath)).getText();
+			return driver.findElement(By.xpath(_idOrXpath)).getText();
 		}
 		else
 		{
-			throw new IllegalArgumentException("No such type present" + idOrXpathType);
+			throw new IllegalArgumentException("No such type present" + _idOrXpathType);
 		}
 	}
+	
+	public static void SearchHotel(string _locality, string _checkInDate, string _checkOutDate, string _travellerSelection)
+	{
+		try
+		{
+			hotelLink.click();
+
+			localityTextBox.sendKeys(_locality);
+		
+			checkInDate.sendKeys(_checkInDate);
+		
+			checkOutDate.sendKeys(_checkOutDate);
+			
+			new Select(travellerSelection).selectByVisibleText(_travellerSelection);
+			searchButton.click();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		} 
+	}
+	
+	public static void WebClickButtonById(string _id)
+	{
+		try
+			driver.findElement(By.id(_id)).click();
+		catch (Exception e)
+			System.out.println(e.message());
+	}
+	
+	public static void WebEnterTextById(string _id, string text)
+	{
+		try{
+			driver.findElement(By.id("_id")).clear();
+			driver.findElement(By.id(_id)).sendKeys(text);
+		}
+		catch (Exception e)
+			System.out.println(e.message());
+	}
+	
+	public static boolean isElementPresent(By by) {
+        try {
+            driver.findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
 
     public static void SetDriverPath() {
         if (PlatformUtil.isMac()) {
@@ -57,6 +124,8 @@ public static class Utility {
             System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
         }
     }
+	
+	
 
 
 }
