@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import Utility;
 
 import java.util.List;
 
@@ -19,12 +20,12 @@ public class FlightBookingTest {
     public void testThatResultsAppearForAOneWayJourney() {
 
         setDriverPath();
-        driver.get("https://www.cleartrip.com/");
+        WebNavigateTo("https://www.cleartrip.com/");
         waitFor(2000);
-        driver.findElement(By.id("OneWay")).click();
+        WebClickButtonById("OneWay")
 
         driver.findElement(By.id("FromTag")).clear();
-        driver.findElement(By.id("FromTag")).sendKeys("Bangalore");
+		WebEnterTextById("FromTag","Bangalore");
 
         //wait for the auto complete options to appear for the origin
 
@@ -32,8 +33,7 @@ public class FlightBookingTest {
         List<WebElement> originOptions = driver.findElement(By.id("ui-id-1")).findElements(By.tagName("li"));
         originOptions.get(0).click();
 
-        driver.findElement(By.id("toTag")).clear();
-        driver.findElement(By.id("toTag")).sendKeys("Delhi");
+		WebEnterTextById("toTag","Delhi");
 
         //wait for the auto complete options to appear for the destination
 
@@ -45,7 +45,7 @@ public class FlightBookingTest {
         driver.findElement(By.xpath("//*[@id='ui-datepicker-div']/div[1]/table/tbody/tr[3]/td[7]/a")).click();
 
         //all fields filled in. Now click on search
-        driver.findElement(By.id("SearchBtn")).click();
+		WebClickButtonById("SearchBtn")
 
         waitFor(5000);
         //verify that result appears for the provided journey search
@@ -56,34 +56,4 @@ public class FlightBookingTest {
 
     }
 
-
-    private void waitFor(int durationInMilliSeconds) {
-        try {
-            Thread.sleep(durationInMilliSeconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-    }
-
-
-    private boolean isElementPresent(By by) {
-        try {
-            driver.findElement(by);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
-        if (PlatformUtil.isWindows()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        }
-        if (PlatformUtil.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-        }
-    }
 }
